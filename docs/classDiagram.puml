@@ -1,0 +1,81 @@
+@startuml
+enum ColorType {
+  WHITE
+  DARK
+  LIGHT
+  COLOR
+}
+
+enum Dirtyness {
+  CLEAN
+  SOMEWHAT_DIRTY
+  DIRTY
+  NEEDS_TREATMENT
+}
+
+enum CareType {
+  TEMPERATURE
+  BEACH
+  DRYER
+  SPIN
+}
+
+class CareInstruction {
+  + name: string
+  + imageUrl: string
+  + careType: CareType
+  + value: int // can be boolean
+}
+
+class Cloth {
+ + weight: int
+ + imageUrl: string
+ + colorType: ColorType
+ + dirtyness: Dirtyness
+ + careInstructions: CareInstruction[]
+}
+
+class WashingMachine {
+  + name: string
+  + maxSupportedWeight: int
+  + hasDryer: boolean
+  + maxSupportedWeightForDry: int
+}
+
+class WasingInstructions {
+  + maxTemperature: int
+  + washingTime: int
+  + useDryer: boolean
+  + dryerTime: int
+  + useBleach: boolean
+  + useSpin: boolean
+  + spinRPM: int
+  + spinTime: int
+}
+
+class LaundryBatch {
+  + creationDate: Date
+  + cloths: Cloth[]
+  + wasingInstructions: WasingInstructions
+  + washingMachine: WashingMachine
+}
+
+class Closet {
+  + name: string
+  + clothes: Cloth[]
+}
+
+class User {
+  + name: string
+  + email: string
+  + password: string
+
+}
+
+Cloth "*" *-- "*" CareInstruction : has
+Cloth "*" --* "1" Closet : has
+LaundryBatch "1" --* "1" WasingInstructions : has
+LaundryBatch "1" --* "1" WashingMachine : uses
+LaundryBatch "1" --* "*" Cloth : includes
+User "1" --o "*" Closet : has
+@enduml
