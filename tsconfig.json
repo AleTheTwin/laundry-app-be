@@ -8,7 +8,6 @@
         "declaration": true,
         "removeComments": true,
         "emitDecoratorMetadata": true,
-        "ignoreDeprecations": "6.0",
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "target": "ES2023",
