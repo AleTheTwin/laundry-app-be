@@ -1,42 +1,43 @@
 name: Build & Push Backend
 
 on:
-  push:
-    branches: [main]
+    push:
+        branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: self-hosted
 
-    permissions:
-      packages: write
-      contents: read
+        permissions:
+            packages: write
+            contents: read
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Login to GHCR
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            - name: Login to GHCR
+              run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor
+                  }} --password-stdin
 
-      - name: Build image
-        run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/laundry-app-be:latest .
+            - name: Build image
+              run: |
+                  docker build -t ghcr.io/${{ github.repository_owner }}/laundry-app-be:latest .
 
-      - name: Push image
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/laundry-app-be:latest
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
+            - name: Push image
+              run: |
+                  docker push ghcr.io/${{ github.repository_owner }}/laundry-app-be:latest
+    deploy:
+        needs: build
+        runs-on: self-hosted
 
-    steps:
-      - uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /app
-            docker compose down
-            docker compose pull
-            docker compose up -d
+        steps:
+            - uses: appleboy/ssh-action@v1
+              with:
+                  host: ${{ secrets.VPS_HOST }}
+                  username: ${{ secrets.VPS_USER }}
+                  key: ${{ secrets.VPS_SSH_KEY }}
+                  script: |
+                      cd /app
+                      docker compose down
+                      docker compose pull
+                      docker compose up -d
