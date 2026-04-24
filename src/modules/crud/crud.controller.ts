@@ -21,12 +21,12 @@ import {
     ApiResponse,
 } from '@nestjs/swagger';
 
-import { GenericCrud, ModelName } from './generic-crud.service.js';
+import { CrudService, ModelName } from './crud.service.js';
 
-@ApiTags('Generic CRUD')
-@Controller('generic')
-export class GenericCrudController {
-    constructor(private readonly crud: GenericCrud) {}
+@ApiTags('CRUD')
+@Controller('crud')
+export class CrudController {
+    constructor(private readonly crud: CrudService) {}
 
     /*
    =========================
@@ -50,7 +50,6 @@ export class GenericCrudController {
     @ApiQuery({
         name: 'include',
         required: false,
-        example: '{"profile":true}',
     })
     @ApiQuery({
         name: 'select',
