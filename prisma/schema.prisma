@@ -23,7 +23,7 @@ generator nestjsDto {
     outputType                      = "class"
     definiteAssignmentAssertion     = "false"
     requiredResponseApiProperty     = "true"
-    prettier                        = "false"
+    prettier                        = "true"
     wrapRelationsAsType             = "false"
     showDefaultValues               = "false"
 }
