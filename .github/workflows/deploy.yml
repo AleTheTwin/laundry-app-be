@@ -30,9 +30,15 @@ jobs:
               run: npm run build
 
             - name: Start application for API client generation
+              shell: bash
               run: |
-                  npm run start:prod &
-                  sleep 10
+                  if [[ "$RUNNER_OS" == "Windows" ]]; then
+                    Start-Process -FilePath "npm" -ArgumentList "run","start:prod" -WindowStyle Hidden
+                    Start-Sleep -Seconds 10
+                  else
+                    npm run start:prod &
+                    sleep 10
+                  fi
 
             - name: Generate API client
               run: |
@@ -49,7 +55,13 @@ jobs:
                   npm publish --access public
 
             - name: Stop application
-              run: pkill -f "node dist/main" || true
+              shell: bash
+              run: |
+                  if [[ "$RUNNER_OS" == "Windows" ]]; then
+                    Get-Process | Where-Object {$_.ProcessName -eq "node"} | Stop-Process -Force
+                  else
+                    pkill -f "node dist/main" || true
+                  fi
 
             - name: Login to GHCR
               run:
