@@ -56,7 +56,7 @@ jobs:
               run: |
                   cd api-client
                   echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-                  npm publish --access public --provenance
+                  npm publish --access public
 
             - name: Stop application
               run: |
