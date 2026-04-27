@@ -30,6 +30,11 @@ jobs:
               run: npm run build
 
             - name: Start application for API client generation
+              env:
+                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+                  JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+                  PORT: 3000
               run: |
                   npm run start:prod &
                   sleep 10
