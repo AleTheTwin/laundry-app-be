@@ -26,12 +26,6 @@ jobs:
             - name: Generate prisma client
               run: npm run prisma:generate
 
-            - name: Echo variables
-              run: |
-                  echo "DATABASE_URL: ${{ secrets.DATABASE_URL }}"
-                  echo "JWT_SECRET: ${{ secrets.JWT_SECRET }}"
-                  echo "JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}"
-
             - name: Build application
               run: npm run build
 

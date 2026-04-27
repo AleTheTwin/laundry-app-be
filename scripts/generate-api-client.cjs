@@ -328,7 +328,8 @@ function generatePackageJson() {
 function generateIndexTs() {
     const indexContent = `// Main entry point for Laundry App API Client
 export * from './types';
-export { LaundryAppApiClient, createApiClient } from './types';
+import { LaundryAppApiClient, createApiClient } from './types';
+export { LaundryAppApiClient, createApiClient };
 export default LaundryAppApiClient;
 `;
 
