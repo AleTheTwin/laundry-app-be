@@ -313,7 +313,7 @@ function generatePackageJson() {
         files: ['types.ts', 'index.js', 'README.md'],
         repository: {
             type: 'git',
-            url: 'https://github.com/AleTheTwin/laundry-app-be.git',
+            url: 'git+https://github.com/AleTheTwin/laundry-app-be.git',
             directory: 'api-client',
         },
     };
