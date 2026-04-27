@@ -264,9 +264,14 @@ export class LaundryAppApiClient {
 
     // Generate nested controller objects
     Object.entries(controllerGroups).forEach(([controllerName, methods]) => {
+        // Sanitize controller name for JavaScript property
+        const sanitizedControllerName = controllerName.replace(
+            /[^a-zA-Z0-9]/g,
+            '',
+        );
         content += `
-    // ${capitalizeFirstLetter(controllerName)} controller methods
-    ${controllerName}: {`;
+    // ${capitalizeFirstLetter(sanitizedControllerName)} controller methods
+    ${sanitizedControllerName}: {`;
 
         methods.forEach((method) => {
             content += `
@@ -301,13 +306,25 @@ export default LaundryAppApiClient;
 function getMethodName(operationId, path, method) {
     // Use operationId if available, clean it up
     if (operationId) {
-        // Remove controller prefix and clean up
-        const cleanName = operationId.replace(/[^a-zA-Z0-9]/g, '');
+        // Handle format like "AuthController_register"
+        const underscoreMatch = operationId.match(/^(.+?)_([a-zA-Z].*)$/);
+        if (underscoreMatch) {
+            // Convert to camelCase: "register" -> "register", "getProfile" -> "getProfile"
+            const methodPart = underscoreMatch[2];
+            return methodPart.charAt(0).toLowerCase() + methodPart.slice(1);
+        }
 
-        // If operationId contains controller name, extract just the method part
-        const controllerMatch = cleanName.match(/^(.+?)([A-Z][a-z]+.*)$/);
+        // Handle format like "AuthControllerregister" (fallback)
+        const cleanName = operationId.replace(/[^a-zA-Z0-9]/g, '');
+        const controllerMatch = cleanName.match(
+            /^(.+?)(Controller[A-Z][a-z]+.*)$/,
+        );
         if (controllerMatch) {
-            return controllerMatch[2];
+            return controllerMatch[2].replace(/^Controller/, '');
+        }
+
+        if (cleanName.startsWith('Controller')) {
+            return cleanName.replace(/^Controller/, '');
         }
 
         return cleanName;
